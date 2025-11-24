@@ -1,4 +1,4 @@
-#Recursos Cache
+#Python recursos Cache
 __pycache__/
 *.pyc
 *.pyo

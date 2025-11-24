@@ -1,0 +1,4 @@
+#Recursos Cache
+__pycache__/
+*.pyc
+*.pyo

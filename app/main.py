@@ -1,7 +1,8 @@
 from fastapi import FastAPI #importa la clase FastApi para crear la API
-from fastapi.middleware.cors import CORSMiddleware #controla el acceso de las paginas que pueden acceder a nuestra API
-#from app.routes.notes.endpoints import router as notes_router #Organizacion de endpoints
+from fastapi.middleware.cors import CORSMiddleware #controla el acceso (CORS) de las paginas que pueden acceder a nuestra API
+from app.routes.notes.endpoints import router as notes_router #direccion de los endpoints
 from app.clients.firestore import get_firestore_client
+
 #Instanciamos FastApi
 app1 = FastAPI()
 
@@ -13,22 +14,9 @@ app1.add_middleware(
     allow_methods=["*"],#Permite todos los métodos HTTP (GET, POST, PUT, DELETE, etc.)
     allow_headers=["*"]#Permite todos los headers personalizados enviados por el cliente(Fronted).
 )
+#concetamos la "mini-api"(endpoints del archivo endpoints.py) en el main 
+app1.include_router(notes_router)
 
 @app1.get("/hola")
 def hello_world():
     return {"message" : "Hello world"}
-
-
-@app1.get("/notes")
-async def get_notes():
-    db = get_firestore_client()
-    collection_ref = db.collection("users")
-
-    notes = []
-
-    docs = collection_ref.stream()
-    for doc in docs:
-        note_data = doc.to_dict()
-        notes.append(note_data)
-    
-    return {"notes" : notes}
